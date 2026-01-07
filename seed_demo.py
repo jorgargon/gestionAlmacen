@@ -191,6 +191,169 @@ def seed_demo_data():
         ll = LotLocation(lot_id=lots[lot_idx].id, location_id=loc_id, quantity=qty)
         db.session.add(ll)
     
+    db.session.flush()
+    
+    # ============ PRODUCTION ORDERS ============
+    print("  - Creating production orders...")
+    from models import ProductionOrder, ProductionOrderStatus, ProductionOrderFinishedProduct, ProductionOrderMaterial
+    from datetime import datetime
+    
+    # Create closed production orders for traceability demo
+    po1 = ProductionOrder(order_number='OF1', status=ProductionOrderStatus.CLOSED, 
+                          production_date=date(2025, 12, 3))
+    po2 = ProductionOrder(order_number='OF2', status=ProductionOrderStatus.CLOSED,
+                          production_date=date(2025, 12, 3))
+    po6 = ProductionOrder(order_number='TEST-002', status=ProductionOrderStatus.CLOSED,
+                          production_date=date(2025, 12, 19))
+    po10 = ProductionOrder(order_number='PRUEBATRAZ', status=ProductionOrderStatus.CLOSED,
+                           production_date=date(2025, 12, 19))
+    
+    production_orders = [po1, po2, po6, po10]
+    db.session.add_all(production_orders)
+    db.session.flush()
+    
+    # ============ PRODUCTION ORDER FINISHED PRODUCTS ============
+    print("  - Creating finished products for orders...")
+    
+    # OF1 -> lot 121225 (lots[2])
+    fp1 = ProductionOrderFinishedProduct(
+        production_order_id=po1.id, finished_product_id=6, lot_number='121225',
+        target_quantity=20.0, produced_quantity=20.0, unit='Ud',
+        expiration_date=date(2026, 2, 1), lot_id=lots[2].id
+    )
+    # OF2 -> lot 131225 (lots[5])
+    fp2 = ProductionOrderFinishedProduct(
+        production_order_id=po2.id, finished_product_id=6, lot_number='131225',
+        target_quantity=60.0, produced_quantity=60.0, unit='ud',
+        expiration_date=date(2027, 12, 13), lot_id=lots[5].id
+    )
+    # TEST-002 -> lots 191225 crema50 (lots[10]) and crema100 (lots[11])
+    fp7 = ProductionOrderFinishedProduct(
+        production_order_id=po6.id, finished_product_id=6, lot_number='191225',
+        target_quantity=100.0, produced_quantity=100.0, unit='ud',
+        expiration_date=date(2027, 12, 19), lot_id=lots[10].id
+    )
+    fp8 = ProductionOrderFinishedProduct(
+        production_order_id=po6.id, finished_product_id=7, lot_number='191225',
+        target_quantity=50.0, produced_quantity=50.0, unit='ud',
+        expiration_date=date(2027, 12, 19), lot_id=lots[11].id
+    )
+    # PRUEBATRAZ -> lots 191225PRUEBATRAZ (lots[17] crema50, lots[18] crema100)
+    fp18 = ProductionOrderFinishedProduct(
+        production_order_id=po10.id, finished_product_id=6, lot_number='191225PRUEBATRAZ',
+        target_quantity=100.0, produced_quantity=95.0, unit='ud',
+        expiration_date=date(2027, 12, 19), lot_id=lots[17].id
+    )
+    fp19 = ProductionOrderFinishedProduct(
+        production_order_id=po10.id, finished_product_id=7, lot_number='191225PRUEBATRAZ',
+        target_quantity=100.0, produced_quantity=100.0, unit='ud',
+        expiration_date=date(2027, 12, 19), lot_id=lots[18].id
+    )
+    
+    finished_products = [fp1, fp2, fp7, fp8, fp18, fp19]
+    db.session.add_all(finished_products)
+    db.session.flush()
+    
+    # ============ PRODUCTION ORDER MATERIALS ============
+    print("  - Creating materials consumed...")
+    
+    # OF1 materials: lot 344322 (lots[1]) and L182634 (lots[0])
+    mat1 = ProductionOrderMaterial(production_order_id=po1.id, lot_id=lots[1].id, 
+                                    quantity_consumed=3.0, unit='l')
+    mat2 = ProductionOrderMaterial(production_order_id=po1.id, lot_id=lots[0].id, 
+                                    quantity_consumed=5.0, unit='l')
+    
+    # OF2 materials
+    mat3 = ProductionOrderMaterial(production_order_id=po2.id, lot_id=lots[1].id, 
+                                    quantity_consumed=17.0, unit='l')
+    mat4 = ProductionOrderMaterial(production_order_id=po2.id, lot_id=lots[4].id, 
+                                    quantity_consumed=20.0, unit='l')
+    mat5 = ProductionOrderMaterial(production_order_id=po2.id, lot_id=lots[0].id, 
+                                    quantity_consumed=5.0, unit='l')
+    
+    # TEST-002 materials
+    mat6 = ProductionOrderMaterial(production_order_id=po6.id, lot_id=lots[3].id, 
+                                    quantity_consumed=4.06, unit='l', 
+                                    original_quantity=4.0, original_unit='kg')
+    mat7 = ProductionOrderMaterial(production_order_id=po6.id, lot_id=lots[8].id, 
+                                    quantity_consumed=10.0, unit='kg',
+                                    original_quantity=10.0, original_unit='kg')
+    mat8 = ProductionOrderMaterial(production_order_id=po6.id, lot_id=lots[4].id, 
+                                    quantity_consumed=20.0, unit='l',
+                                    original_quantity=20.0, original_unit='kg')
+    
+    # PRUEBATRAZ materials with traceability links
+    mat9 = ProductionOrderMaterial(production_order_id=po10.id, lot_id=lots[8].id, 
+                                    quantity_consumed=10.0, unit='kg',
+                                    original_quantity=10.0, original_unit='kg')
+    mat10 = ProductionOrderMaterial(production_order_id=po10.id, lot_id=lots[0].id, 
+                                     quantity_consumed=4.06, unit='l',
+                                     original_quantity=4.0, original_unit='kg')
+    mat11 = ProductionOrderMaterial(production_order_id=po10.id, lot_id=lots[13].id, 
+                                     quantity_consumed=95.0, unit='ud',
+                                     original_quantity=95.0, original_unit='ud',
+                                     related_finished_product_id=fp18.id)
+    mat12 = ProductionOrderMaterial(production_order_id=po10.id, lot_id=lots[14].id, 
+                                     quantity_consumed=100.0, unit='ud',
+                                     original_quantity=100.0, original_unit='ud',
+                                     related_finished_product_id=fp19.id)
+    
+    materials = [mat1, mat2, mat3, mat4, mat5, mat6, mat7, mat8, mat9, mat10, mat11, mat12]
+    db.session.add_all(materials)
+    db.session.flush()
+    
+    # ============ SHIPMENTS ============
+    print("  - Creating shipments...")
+    from models import Shipment, ShipmentDetail
+    
+    ship1 = Shipment(customer_id=customers[0].id, shipment_date=date(2025, 12, 15), 
+                      shipment_number='ENV-2025-001', notes='')
+    ship2 = Shipment(customer_id=customers[2].id, shipment_date=date(2025, 12, 19), 
+                      shipment_number='ENV-2025-002', notes='')
+    ship3 = Shipment(customer_id=customers[2].id, shipment_date=date(2025, 12, 20), 
+                      shipment_number='ENV-2025-003', notes='')
+    ship4 = Shipment(customer_id=customers[3].id, shipment_date=date(2025, 12, 21), 
+                      shipment_number='ENV-2025-004', notes='')
+    
+    shipments = [ship1, ship2, ship3, ship4]
+    db.session.add_all(shipments)
+    db.session.flush()
+    
+    # Shipment details
+    sd1 = ShipmentDetail(shipment_id=ship1.id, lot_id=lots[2].id, quantity=10.0, unit='ud')
+    sd2 = ShipmentDetail(shipment_id=ship2.id, lot_id=lots[2].id, quantity=5.0, unit='ud')
+    sd3 = ShipmentDetail(shipment_id=ship3.id, lot_id=lots[11].id, quantity=15.0, unit='ud')
+    sd4 = ShipmentDetail(shipment_id=ship3.id, lot_id=lots[5].id, quantity=50.0, unit='ud')
+    sd5 = ShipmentDetail(shipment_id=ship4.id, lot_id=lots[5].id, quantity=10.0, unit='ud')
+    
+    db.session.add_all([sd1, sd2, sd3, sd4, sd5])
+    db.session.flush()
+    
+    # ============ RETURNS ============
+    print("  - Creating returns...")
+    from models import Return, ReturnDetail
+    
+    ret1 = Return(customer_id=customers[2].id, return_date=date(2025, 12, 22),
+                  return_number='DEV-2025-001',
+                  reason='customer_return', notes='El producto está sin las etiquetas de lote')
+    ret2 = Return(customer_id=customers[0].id, return_date=date(2025, 12, 22),
+                  return_number='DEV-2025-002',
+                  reason='quality_issue', notes='Los tapones no cierran bien.')
+    ret3 = Return(customer_id=customers[3].id, return_date=date(2025, 12, 23),
+                  return_number='DEV-2025-003',
+                  reason='market_recall', notes='')
+    
+    returns = [ret1, ret2, ret3]
+    db.session.add_all(returns)
+    db.session.flush()
+    
+    # Return details
+    rd1 = ReturnDetail(return_id=ret1.id, lot_id=lots[11].id, quantity=15.0, unit='ud')
+    rd2 = ReturnDetail(return_id=ret2.id, lot_id=lots[2].id, quantity=5.0, unit='ud')
+    rd3 = ReturnDetail(return_id=ret3.id, lot_id=lots[5].id, quantity=3.0, unit='ud')
+    
+    db.session.add_all([rd1, rd2, rd3])
+    
     # ============ COMMIT ============
     db.session.commit()
     
@@ -200,6 +363,9 @@ def seed_demo_data():
     print(f"  - {Lot.query.count()} lots")
     print(f"  - {Customer.query.count()} customers")
     print(f"  - {LotLocation.query.count()} lot locations")
+    print(f"  - {ProductionOrder.query.count()} production orders")
+    print(f"  - {Shipment.query.count()} shipments")
+    print(f"  - {Return.query.count()} returns")
     
     return True
 
@@ -209,3 +375,4 @@ if __name__ == '__main__':
     app = create_app('development')
     with app.app_context():
         seed_demo_data()
+
