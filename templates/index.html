@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Almacén</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/forms.css">
+
+    <!-- Choices.js for searchable dropdowns -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>Gestión Almacén</h1>
+                <p>Sistema de trazabilidad</p>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-item active" data-view="dashboard">
+                    <span class="nav-item-icon">📊</span>
+                    <span>Dashboard</span>
+                    <span id="alerts-count" class="alerts-badge hidden">0</span>
+                </div>
+
+                <div class="nav-item" data-view="products">
+                    <span class="nav-item-icon">📦</span>
+                    <span>Productos</span>
+                </div>
+
+                <div class="nav-item" data-view="lots">
+                    <span class="nav-item-icon">🏷️</span>
+                    <span>Lotes</span>
+                </div>
+
+                <div class="nav-item" data-view="receptions">
+                    <span class="nav-item-icon">📥</span>
+                    <span>Recepciones</span>
+                </div>
+
+                <div class="nav-item" data-view="inventory">
+                    <span class="nav-item-icon">📋</span>
+                    <span>Inventario</span>
+                </div>
+
+                <div class="nav-item" data-view="production">
+                    <span class="nav-item-icon">⚙️</span>
+                    <span>Producción</span>
+                </div>
+
+                <div class="nav-item" data-view="customers">
+                    <span class="nav-item-icon">👥</span>
+                    <span>Clientes</span>
+                </div>
+
+                <div class="nav-item" data-view="shipments">
+                    <span class="nav-item-icon">🚚</span>
+                    <span>Envíos</span>
+                </div>
+
+                <div class="nav-item" data-view="returns">
+                    <span class="nav-item-icon">↩️</span>
+                    <span>Devoluciones</span>
+                </div>
+
+                <div class="nav-item" data-view="traceability">
+                    <span class="nav-item-icon">🔍</span>
+                    <span>Trazabilidad</span>
+                </div>
+
+                <div class="nav-item" data-view="movements">
+                    <span class="nav-item-icon">🔄</span>
+                    <span>Movimientos</span>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div id="app-content">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Choices.js -->
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+    <!-- JavaScript -->
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/forms.js"></script>
+    <script src="/static/js/traceability.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+# Excluir archivos innecesarios para distribución
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+*.db
+*.sqlite
+*.sqlite3
+.DS_Store
+.idea/
+.vscode/
+*.log
+.env

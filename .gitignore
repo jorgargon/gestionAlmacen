@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.env
+.venv/
+venv/
+ENV/
+
+# Instance folder (base de datos SQLite)
+instance/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Archivos temporales de Word
+~$*
+
+# Documentos generados (no subir al repo)
+generated_docs/
+
+# Backups
+*.backup
