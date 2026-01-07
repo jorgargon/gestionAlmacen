@@ -31,35 +31,35 @@ def seed_demo_data():
     # ============ PRODUCTS ============
     print("  - Creating products...")
     
-    # Raw Materials (id=1,2,3,8)
+    # Raw Materials (id=1,2,3,8) - with density for unit conversion
     p1_agua = Product(code='MP-001', name='Agua destilada', type=ProductType.RAW_MATERIAL,
                       description='Agua destilada para uso cosmético', min_stock=100.0, 
-                      storage_unit='l', consumption_unit='kg')
+                      storage_unit='l', consumption_unit='kg', density=1.0)
     p2_glicerina = Product(code='MP-002', name='Glicerina', type=ProductType.RAW_MATERIAL,
                            description='Glicerina vegetal', min_stock=50.0,
-                           storage_unit='kg', consumption_unit='kg')
+                           storage_unit='kg', consumption_unit='kg', density=None)
     p3_aceite = Product(code='MP-003', name='Aceite esencial', type=ProductType.RAW_MATERIAL,
                         description='Aceite esencial de lavanda', min_stock=5.0,
-                        storage_unit='l', consumption_unit='kg')
+                        storage_unit='l', consumption_unit='kg', density=0.985)
     p8_dens = Product(code='MP-DENS-001', name='Materia Densa', type=ProductType.RAW_MATERIAL,
-                      description='', min_stock=None, storage_unit='l', consumption_unit='kg')
+                      description='', min_stock=None, storage_unit='l', consumption_unit='kg', density=2.0)
     
     # Packaging (id=4,5,9)
     p4_tarro50 = Product(code='ENV-001', name='Tarro 50ml', type=ProductType.PACKAGING,
                          description='Tarro de vidrio 50ml', min_stock=500.0,
-                         storage_unit='ud', consumption_unit='ud')
+                         storage_unit='ud', consumption_unit=None, density=None)
     p5_etiqueta = Product(code='ENV-002', name='Etiqueta', type=ProductType.PACKAGING,
                           description='Etiqueta adhesiva para tarros', min_stock=500.0,
-                          storage_unit='ud', consumption_unit='ud')
+                          storage_unit='ud', consumption_unit='ud', density=None)
     p9_tarro100 = Product(code='ENV-003', name='Tarro de 100ml', type=ProductType.PACKAGING,
-                          description='', min_stock=1000.0, storage_unit='ud', consumption_unit='ud')
+                          description='', min_stock=1000.0, storage_unit='ud', consumption_unit='ud', density=None)
     
     # Finished Products (id=6,7)
     p6_crema50 = Product(code='PA-001', name='Crema Hidratante 50ml', type=ProductType.FINISHED_PRODUCT,
                          description='Crema hidratante facial 50ml', min_stock=50.0,
-                         storage_unit='ud', consumption_unit='ud')
+                         storage_unit='ud', consumption_unit='ud', density=None)
     p7_crema100 = Product(code='PA-002', name='Crema Hidratante 100ml', type=ProductType.FINISHED_PRODUCT,
-                          description='', min_stock=30.0, storage_unit='ud', consumption_unit='ud')
+                          description='', min_stock=30.0, storage_unit='ud', consumption_unit='ud', density=None)
     
     # Add in order to maintain IDs
     products = [p1_agua, p2_glicerina, p3_aceite, p4_tarro50, p5_etiqueta, 
