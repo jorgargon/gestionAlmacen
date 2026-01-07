@@ -26,6 +26,8 @@ class ProductionConfig(Config):
     """Production configuration"""
     DEBUG = False
     SQLALCHEMY_ECHO = False
+    # Allow all origins for demo purposes
+    CORS_ORIGINS = ['*']
 
 
 # Configuration dictionary
